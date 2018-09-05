@@ -450,6 +450,14 @@
                     },
                     "spec": {
                         "terminationGracePeriodSeconds": 75,
+                        "initContainers": [
+                            {
+                                "name": "${APPLICATION_NAME}-postgresql-init-wait",
+                                "image": "registry.redhat.io/redhat-sso-7/sso72-openshift:1.3",
+                                "command": [ "/usr/bin/sh", "-c",
+                                    "until nc -w 3 -z \"${APPLICATION_NAME}-postgresql\" 5432; do echo Waiting for the \"${APPLICATION_NAME}-postgresql\" service to become available.. ; sleep 10 ; done"]
+                            }
+                        ],
                         "containers": [
                             {
                                 "name": "${APPLICATION_NAME}",
